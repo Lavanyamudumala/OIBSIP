@@ -1,0 +1,56 @@
+import java.util.Scanner;
+
+public class OnlineReservationSystem {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Login login = new Login();
+        ReservationSystem reservationSystem = new ReservationSystem();
+
+        // Login module
+        System.out.println("Welcome to Online Reservation System");
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+        if (login.authenticate(username, password)) {
+            System.out.println("Login successful");
+        } else {
+            System.out.println("Invalid credentials. Exiting...");
+            return;
+        }
+
+        // Main menu
+        while (true) {
+            System.out.println("\nPlease select an option:");
+            System.out.println("1. Make Reservation");
+            System.out.println("2. Cancel Reservation");
+            System.out.println("3. Exit");
+            int option = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            switch (option) {
+                case 1:
+                    // Reservation form
+                    System.out.print("Enter your name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter train number: ");
+                    String trainNumber = scanner.nextLine();
+                    // Other details...
+                    System.out.println("Reservation successful!");
+                    break;
+                case 2:
+                    // Cancellation form
+                    System.out.print("Enter PNR number to cancel reservation: ");
+                    String pnrNumber = scanner.nextLine();
+                    reservationSystem.cancelReservation(pnrNumber);
+                    System.out.println("Reservation canceled successfully!");
+                    break;
+                case 3:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid option!");
+            }
+        }
+    }
+}
