@@ -31,3 +31,11 @@ We have all come across ATMs in our cities and it is built on Java. This complex
 5. Quit
 →
 For Demo Click
+
+TASK4-Online Examination
+The project should be capable of the following functionalities.
+• Login
+• Update Profile and Password
+• Selecting answers for MCQs
+• Timer and auto submit
+• Closing session and Logout
