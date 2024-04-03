@@ -1,0 +1,91 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+public class Examination {
+    static Scanner scanner = new Scanner(System.in);
+    static Map<String, String> users = new HashMap<>();
+    static Map<String, String> profiles = new HashMap<>();
+    static String currentUser;
+
+    public static void main(String[] args) {
+        users.put("user1", "password1");
+        boolean running = true;
+        while (running) {
+            System.out.println("1. Login");
+            System.out.println("2. Update Profile and Password");
+            System.out.println("3. Select Answers for MCQs");
+            System.out.println("4. Timer and Auto Submit");
+            System.out.println("5. Close Session and Logout");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    login();
+                    break;
+                case 2:
+                    updateProfileAndPassword();
+                    break;
+                case 3:
+                    selectAnswersForMCQs();
+                    break;
+                case 4:
+                    timerAndAutoSubmit();
+                    break;
+                case 5:
+                    closeSessionAndLogout();
+                    break;
+                case 6:
+                    running = false;
+                    System.out.println("Exiting...");
+                    break;
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    static void login() {
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+        if (users.containsKey(username) && users.get(username).equals(password)) {
+            currentUser = username;
+            System.out.println("Login successful!");
+        } else {
+            System.out.println("Invalid username or password!");
+        }
+    }
+
+    static void updateProfileAndPassword() {
+        if (currentUser == null) {
+            System.out.println("Please login first!");
+            return;
+        }
+        System.out.print("Enter new name: ");
+        String name = scanner.nextLine();
+        profiles.put(currentUser, name);
+        System.out.print("Enter new password: ");
+        String password = scanner.nextLine();
+        users.put(currentUser, password);
+        System.out.println("Profile and password updated successfully!");
+    }
+
+    static void selectAnswersForMCQs() {
+    }
+
+    static void timerAndAutoSubmit() {
+    }
+
+    static void closeSessionAndLogout() {
+        if (currentUser == null) {
+            System.out.println("No active session to close!");
+            return;
+        }
+        currentUser = null;
+        System.out.println("Session closed and logged out!");
+    }
+}
