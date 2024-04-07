@@ -1,57 +1,105 @@
-import java.util.Random;
-import java.util.Scanner;
-import javax.swing.JOptionPane;
-public class Number {
+import java.util.*;
+
+public class NumberGuessingGame {
+    static ArrayList<Integer> scoreBoard = new ArrayList<Integer>();
+    static final int MAX_GUESSES = 10;
+
     public static void main(String[] args) {
-        int minRange = 1;
-        int maxRange = 100;
-        int maxAttempts = 5;
-        int totalScore = 0;
-        boolean playAgain = true;
-
-        while (playAgain) {
-            int randomNumber = generateRandomNumber(minRange, maxRange);
-            int score = playGame(randomNumber, maxAttempts);
-            totalScore += score;
-
-            JOptionPane.showMessageDialog(null, "Your score for this round: " + score + "\nTotal score: " + totalScore);
-
-            int choice = JOptionPane.showConfirmDialog(null, "Do you want to play again?", "Play Again", JOptionPane.YES_NO_OPTION);
-            if (choice != JOptionPane.YES_OPTION)
-                playAgain = false;
-        }
-
-        JOptionPane.showMessageDialog(null, "Thanks for playing! Your final score: " + totalScore);
+        NumberGuessingGame methodChange = new NumberGuessingGame();
+        methodChange.menu(scoreBoard);
     }
 
-    public static int generateRandomNumber(int min, int max) {
-        Random random = new Random();
-        return random.nextInt(max - min + 1) + min;
-    }
+    public void menu(ArrayList<Integer> scoreBoard) {
+        NumberGuessingGame methodChange = new NumberGuessingGame();
+        Scanner input = new Scanner(System.in);
 
-    public static int playGame(int randomNumber, int maxAttempts) {
-        int attempts = 0;
-        int guessedNumber = 0;
+        System.out.println("--------------------");
+        System.out.println("Welcome to the number game");
+        System.out.println("1) Play the Game");
+        System.out.println("2) Score Board");
+        System.out.println("3) Exit the game");
+        System.out.println("--------------------");
 
-        while (attempts < maxAttempts && guessedNumber != randomNumber) {
-            try {
-                String input = JOptionPane.showInputDialog("Guess the number (between 1 and 100):");
-                guessedNumber = Integer.parseInt(input);
+        try {
+            System.out.print("What action would you like to do from the above actions? ");
+            int menuOption = input.nextInt();
 
-                if (guessedNumber == randomNumber) {
-                    JOptionPane.showMessageDialog(null, "Congratulations! You guessed the number.");
-                } else if (guessedNumber < randomNumber) {
-                    JOptionPane.showMessageDialog(null, "Too low! Try again.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Too high! Try again.");
-                }
-                attempts++;
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Invalid input! Please enter a valid number.");
+            switch (menuOption) {
+                case 1:
+                    System.out.print("\n" + "What would you like the range of the numbers to be? ");
+                    int numberRange = input.nextInt();
+                    int randomNumber = methodChange.randomNumber(numberRange);
+                    methodChange.guessNumber(randomNumber);
+                    break;
+                case 2:
+                    methodChange.displayScoreBoard();
+                    break;
+                case 3:
+                    System.out.println("\n" + "Thanks for playing the game!");
+                    System.exit(1);
+                    break;
+                default:
+                    throw new InputMismatchException("Invalid number entry. Please Try again later.");
             }
+        } catch (InputMismatchException e) {
+            System.err.println("\n" + e.getMessage() + "\n");
+            menu(scoreBoard);
+        }
+    }
+
+    public int randomNumber(int numberRange) {
+        Random random = new Random();
+        int randomNumber = random.nextInt(numberRange) + 1;
+        return randomNumber;
+    }
+
+    public void guessNumber(int randomNumber) {
+        Scanner input = new Scanner(System.in);
+        int userGuess;
+        int guess = 0;
+
+        do {
+            if (guess >= MAX_GUESSES) {
+                System.out.println("Sorry, you've reached the maximum number of guesses (" + MAX_GUESSES + "). The correct number was: " + randomNumber);
+                return; // End the game
+            }
+
+            System.out.print("Enter your guess number: ");
+            userGuess = input.nextInt();
+            guess++;
+
+            if (userGuess > randomNumber) {
+                System.out.println("Lower");
+            } else if (userGuess < randomNumber) {
+                System.out.println("Higher");
+            }
+        } while (randomNumber != userGuess);
+
+        // Code for when the correct number is guessed
+        System.out.println(" ");
+        if (guess == 1) {
+            System.out.println("You guessed the number correctly in " + guess + " try!");
+        } else {
+            System.out.println("You guessed the number correctly in " + guess + " tries!");
+        }
+        scoreBoard.add(guess);
+        System.out.println(" ");
+        menu(scoreBoard);
+    }
+
+    public void displayScoreBoard() {
+        System.out.println("--------------------");
+        System.out.println("Score Board");
+        System.out.println("--------------------");
+        System.out.println("Your fastest games today out of all tries is: " + "\n");
+        Collections.sort(scoreBoard);
+
+        for (Integer scores : scoreBoard) {
+            System.out.println("Finished the number game in " + scores + " tries");
         }
 
-        int score = maxAttempts - attempts + 1; // Giving points based on the number of attempts
-        return score > 0 ? score : 0;
+        System.out.println(" ");
+        menu(scoreBoard);
     }
 }
+
